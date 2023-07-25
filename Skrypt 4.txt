@@ -1,0 +1,32 @@
+Skrypt usuwający z katalogu podanego jako argument wywołania dowiązania symboliczne do
+nieistniejących obiektów.
+
+#!/bin/bash
+
+# Sprawdź, czy podano argument (katalog)
+if [ -z "$1" ]; then
+  echo "Podaj ścieżkę do katalogu jako argument skryptu."
+  exit 1
+fi
+
+# Sprawdź, czy podany argument jest istniejącym katalogiem
+if [ ! -d "$1" ]; then
+  echo "Podany argument nie jest istniejącym katalogiem."
+  exit 1
+fi
+
+# Przejdź do podanego katalogu
+cd "$1" || exit 1
+
+# Pobierz listę wszystkich plików w katalogu
+files=$(find . -type f)
+
+# Iteruj przez wszystkie pliki
+for file in $files; do
+  # Sprawdź, czy plik jest dowiązaniem symbolicznym i czy cel istnieje
+  if [ -L "$file" ] && [ ! -e "$file" ]; then
+    # Usuń dowiązanie symboliczne
+    rm "$file"
+    echo "Usunięto dowiązanie symboliczne: $file"
+  fi
+done

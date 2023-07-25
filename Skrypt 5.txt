@@ -1,0 +1,37 @@
+Skrypt sumujący rozmiary plików należących do użytkownika podanego jako pierwszy argument
+wywołania skryptu znajdujących się w katalogu podanym jako drugi argument wywołania; skrypt powinien
+obsługiwać opcję –r, po podaniu której powinien wziąć pod uwagę także podkatalogi katalogu podanego jako
+pierwszy argument wywołania
+
+
+
+#!/bin/bash
+
+# Sprawdź, czy podano wystarczającą liczbę argumentów
+if [ $# -lt 2 ]; then
+  echo "Podaj nazwę użytkownika i ścieżkę do katalogu jako argumenty skryptu."
+  exit 1
+fi
+
+# Pobierz argumenty
+username="$1"
+directory="$2"
+
+# Sprawdź, czy katalog istnieje
+if [ ! -d "$directory" ]; then
+  echo "Podany katalog nie istnieje."
+  exit 1
+fi
+
+# Sprawdź, czy podano opcję -r
+if [ "$3" = "-r" ]; then
+  # Przeszukaj katalog i podkatalogi, a następnie oblicz sumę rozmiarów plików
+  total_size=$(find "$directory" -type f -user "$username" -exec du -c {} + | grep "total$" | awk '{sum += $1} END {print sum}')
+else
+  # Oblicz sumę rozmiarów plików tylko w podanym katalogu
+  total_size=$(find "$directory" -maxdepth 1 -type f -user "$username" -exec du -c {} + | grep "total$" | awk '{sum += $1} END {print sum}')
+fi
+
+# Wyświetl sumę rozmiarów plików
+echo "Suma rozmiarów plików użytkownika $username w katalogu $directory: $total_size KB"
+

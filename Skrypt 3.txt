@@ -1,0 +1,26 @@
+Skrypt zliczający użytkowników systemu zalogowanych w chwili jego uruchomienia oraz zapisujący
+nazwy tych użytkowników do pliku zawierającego w nazwie dokładny czas i datę przeprowadzenia testu
+
+#!/bin/bash
+
+# Pobierz aktualny czas i datę
+current_time=$(date "+%Y%m%d%H%M%S")
+
+# Zlicz zalogowanych użytkowników
+user_count=$(who | wc -l)
+
+# Pobierz nazwy zalogowanych użytkowników
+logged_in_users=$(who | awk '{print $1}')
+
+# Tworzenie nazwy pliku
+filename="users_${current_time}.txt"
+
+# Zapisz nazwy zalogowanych użytkowników do pliku
+echo "$logged_in_users" > "$filename"
+
+# Wyświetl informację
+echo "Liczba zalogowanych użytkowników: $user_count"
+echo "Nazwy użytkowników zapisane w pliku: $filename"
+
+
+

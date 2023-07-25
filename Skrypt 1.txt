@@ -1,0 +1,30 @@
+
+Skrypt tworzy nowy pusty katalog w bieżącym katalogu a następnie kopiuje wszystkie pliki zaczynające się na literę s*. Skrypt powinien sprawdzać czy w bieżżacym katalogu nie istnieje już katalog o takiej nazwie oraz czy użytkownik podał nazwę katalogu jako argumrnt. Na koniec wyświetla nazwę skryptu oraz liczbę argumentów podanych podczas jego uruchamiania.
+
+
+#!/bin/bash
+
+# Sprawdzenie, czy użytkownik podał nazwę katalogu jako argument
+if [ $# -ne 1 ]; then
+  echo "Użycie: $0 nazwa_katalogu"
+  exit 1
+fi
+
+# Przypisanie nazwy katalogu z argumentu do zmiennej
+nazwa_katalogu=$1
+
+# Sprawdzenie, czy istnieje już katalog o takiej nazwie
+if [ -d "$nazwa_katalogu" ]; then
+  echo "Katalog o nazwie $nazwa_katalogu już istnieje"
+  exit 1
+fi
+
+# Utworzenie nowego katalogu
+mkdir "$nazwa_katalogu"
+
+# Kopiowanie plików zaczynających się na literę "s" do nowego katalogu
+cp s* "$nazwa_katalogu"
+
+# Wyświetlenie nazwy skryptu i liczby argumentów
+echo "Nazwa skryptu: $0"
+echo "Liczba argumentów: $#"

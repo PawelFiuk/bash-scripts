@@ -1,0 +1,30 @@
+Skrypt, który usuwa pusty katalog z bieżącego katalogu. Nazwa katalogu powinna być podana jako argument skryptowi. Skrypt sprawdza czy argumnet jest katalogiem i czy jest pusty. Jeżeli nie to usuwa jego całą zawartość a następnie katalog. Na koniec wyświetla zawartość bieżącego katalogu.
+
+#!/bin/bash
+
+# Sprawdzenie, czy użytkownik podał nazwę katalogu jako argument
+if [ $# -ne 1 ]; then
+  echo "Użycie: $0 nazwa_katalogu"
+  exit 1
+fi
+
+# Przypisanie nazwy katalogu z argumentu do zmiennej
+nazwa_katalogu=$1
+
+# Sprawdzenie, czy argument jest katalogiem
+if [ ! -d "$nazwa_katalogu" ]; then
+  echo "$nazwa_katalogu nie jest katalogiem"
+  exit 1
+fi
+
+# Sprawdzenie, czy katalog jest pusty
+if [ -z "$(ls -A $nazwa_katalogu)" ]; then
+  # Jeśli tak, usunięcie katalogu
+  rmdir "$nazwa_katalogu"
+else
+  # Jeśli nie, usuwanie zawartości katalogu i katalogu
+  rm -r "$nazwa_katalogu"
+fi
+
+# Wyświetlenie zawartości bieżącego katalogu
+ls -al
